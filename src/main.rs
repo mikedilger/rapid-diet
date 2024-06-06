@@ -47,6 +47,9 @@ fn normal_daily_nutrition(weight_kg: f32, age_y: f32, height_m: f32) -> Nutritio
         calcium_mg: 1300.0,
         magnesium_mg: 420.0,
         zinc_mg: 11.0,
+        copper_mg: 0.9,
+        potassium_mg: 3400.0,
+        selenium_mcg: 55.0,
     }
 }
 
@@ -54,63 +57,53 @@ fn main() {
     let normal_daily = normal_daily_nutrition(100.0, 54.0, 1.81);
 
     // This diet consists of (daily):
-    let diet = Food::new();
+    let mut diet = Food::new();
     //
     // black coffee
     //
     // MID DAY MEAL
     //   1T of metamucil to keep me moving
-    //   1 multivitamin (every OTHER day to not get too much)
     //   TWO servings of pea protein isolate drink (4 scoops, 60g)
-    let diet = diet.combine(pea_protein_drink(60.0), "Diet".to_owned());
+    diet.combine(pea_protein_drink(60.0));
 
     // DINNER
-    //   1/4 of a jar of Riga Gold sardines with the rapeseed oil
-    let diet = diet.combine(riga_gold_with_oil(270.0 / 4.0), "Diet".to_owned());
+    //   1/8 of a jar of Riga Gold sardines with the rapeseed oil
+    diet.combine(riga_gold_with_oil(270.0 / 8.0));
     //   100g of steamed brussel sprouts
-    let diet = diet.combine(brussel_sprouts(100.0), "Diet".to_owned());
+    diet.combine(brussel_sprouts(200.0));
     //   100g of boiled black beans
-    let diet = diet.combine(black_beans(100.0), "Diet".to_owned());
+    diet.combine(black_beans(120.0));
+    //   200g of baked crown pumpkin flesh
+    diet.combine(pumpkin(200.0));
+    //   20g of roasted unsalted almonds
+    diet.combine(almonds(40.0));
+    //   20g of roasted sunflower seeds
+    diet.combine(sunflower_seeds(20.0));
+    //   plus a VITAMIN D pill of 1000 UI
+    diet.combine(vitamin_d_pill(1000));
 
-    // consider some raw sweet potato (orange kumura), or crown pumpkin
-    // consider mustard greens
+    // Every other day take a multivitamin pill too
 
-    println!("{:?}", diet.nutrition / normal_daily);
+    println!("{:?}\n", diet.nutrition);
+    println!("{}", diet.nutrition / normal_daily);
 }
 
 /*
-w/o the vitamin pill:
-NutritionPercent {
-    energy: 0.24444279,       -- 25% of our normal needs, for weight loss
-    fat: 0.3237035,           -- ok
-    protein: 0.6264574,       -- this is PLENTY, giving 0.75 g/kg which is almost RDA
-    carbs: 0.09030064,        -- ok (carbs aren't essential)
-    sodium: 0.2562457,        -- well within limits
-    cholesterol: 0.091633946, -- well within limits
-    fiber: 0.34123674,        -- nice
-    n3_fat: 1.8907697,        -- plenty
-    n6_fat: 0.4817453,        -- ok
-    lysine: 1.3527843,        -- enough
-    isoleucine: 1.6647613,    -- enough
-    leucine: 1.3023401,       -- enough
-    methionine: 0.54914355,   -- LOW, however methionine is the best one to be low on.
-    phenylalanine: 1.0551715, -- enough
-    tryptophan: 1.3300354,    -- enough
-    valine: 1.4549578,        -- enough
-    threonine: 1.3839456,     -- enough
-    folate: 0.37792876,       -- higher than 25%
-    niacin: 0.21557374,       -- CLOSE to 25%
-    pantothenic_acid: 0.1673952, -- CLOSE to 25%
-    riboflavin: 0.18918808,   -- LOW
-    thiamin: 0.3361433,       -- higher than 25%
-    cobalamin: 1.546931,      -- plenty
-    b6: 0.21818556,           -- CLOSE to 25%
-    vitamin_c: 0.9444444,     -- plenty
-    vitamin_a: 0.05705422,    -- LOW
-    vitamin_d: 0.100116,      -- LOW
-    vitamin_e: 0.21354268,    -- CLOSE to 25%
-    calcium: 0.23134714,      -- CLOSE to 25%
-    magnesium: 0.21016394,    -- CLOSE to 25%
-    zinc: 0.15657227,         -- LOW
-}
-*/
+ * Nutrition Percent:
+ *   ENERGY: 38.7%   FAT 52.4%  PROTEIN 76.7%  CARBS 21.1%
+ *   SODIUM 24.0%  CHOLESTEROL 4.6%
+ *   fiber 86.3%  n3-fat 130.2%  n6-fat 115.1%
+ *   lysine 139.7%  isoleucine 188.8%  leucine 147.2%  methionine: 57.8%
+ *   phenylalanine 124.7%  tryptophan 159.3%  valine 166.5%  threonine: 157.4%
+ *   B1 55.9%  B2 74.0%  B3 65.6%  B5 51.1%  B6 88.2%  B9 75.9%  B12 77.3%
+ *   VitA 48.5%  VitC 201.4%  VitD 130.0%  VitE 146.3%
+ *   Ca 37.7%  Mg 72.5%  Zn 45.8%  Cu 154.2%  K 94.1%  Se 60.2%
+ *
+ * ENERGY: 34.4% -- we get it from our adipose tissue instead
+ * FAT: -- more than 100% of essential fat: n3-fat 123.1%  n6-fat 105.1%
+ * PROTEIN: 70.3% -- 84 g/kg meets the RDA.
+ * CARBS: -- there are no essential carbs. Our body will use the protein
+ *           to generate more carbs
+ * Ess Amino Acids:  We are only low in methionine, which is hard to find.
+ * Vitamins: we are low in some. Take a multivitamin pill
+ */

@@ -1,6 +1,8 @@
+use std::fmt;
+
 use std::ops::{Add, Mul, Div};
 
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct Nutrition {
     pub energy_kj: f32,
 
@@ -40,6 +42,9 @@ pub struct Nutrition {
     pub calcium_mg: f32,
     pub magnesium_mg: f32,
     pub zinc_mg: f32,
+    pub copper_mg: f32,
+    pub potassium_mg: f32,
+    pub selenium_mcg: f32,
 }
 
 impl Nutrition {
@@ -76,6 +81,9 @@ impl Nutrition {
             calcium_mg: 0.0,
             magnesium_mg: 0.0,
             zinc_mg: 0.0,
+            copper_mg: 0.0,
+            potassium_mg: 0.0,
+            selenium_mcg: 0.0,
         }
     }
 }
@@ -116,6 +124,9 @@ impl Add for Nutrition {
             calcium_mg: self.calcium_mg + other.calcium_mg,
             magnesium_mg: self.magnesium_mg + other.magnesium_mg,
             zinc_mg: self.zinc_mg + other.zinc_mg,
+            copper_mg: self.copper_mg + other.copper_mg,
+            potassium_mg: self.potassium_mg + other.potassium_mg,
+            selenium_mcg: self.selenium_mcg + other.selenium_mcg,
         }
     }
 }
@@ -156,6 +167,9 @@ impl Mul<f32> for Nutrition {
             calcium_mg: self.calcium_mg * rhs,
             magnesium_mg: self.magnesium_mg * rhs,
             zinc_mg: self.zinc_mg * rhs,
+            copper_mg: self.copper_mg * rhs,
+            potassium_mg: self.potassium_mg * rhs,
+            selenium_mcg: self.selenium_mcg * rhs,
         }
     }
 }
@@ -196,11 +210,14 @@ impl Div<Nutrition> for Nutrition {
             calcium: self.calcium_mg / other.calcium_mg,
             magnesium: self.magnesium_mg / other.magnesium_mg,
             zinc: self.zinc_mg / other.zinc_mg,
+            copper: self.copper_mg / other.copper_mg,
+            potassium: self.potassium_mg / other.potassium_mg,
+            selenium: self.selenium_mcg / other.selenium_mcg,
         }
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct NutritionPercent {
     pub energy: f32,
     pub fat: f32,
@@ -219,13 +236,13 @@ pub struct NutritionPercent {
     pub tryptophan: f32,
     pub valine: f32,
     pub threonine: f32,
-    pub folate: f32,
-    pub niacin: f32,
-    pub pantothenic_acid: f32,
-    pub riboflavin: f32,
-    pub thiamin: f32,
-    pub cobalamin: f32,
-    pub b6: f32,
+    pub folate: f32, // B9
+    pub niacin: f32, // B3
+    pub pantothenic_acid: f32, // B5
+    pub riboflavin: f32, // B2
+    pub thiamin: f32, // B1
+    pub cobalamin: f32, // B12
+    pub b6: f32, // B6
     pub vitamin_c: f32,
     pub vitamin_a: f32,
     pub vitamin_d: f32,
@@ -233,6 +250,37 @@ pub struct NutritionPercent {
     pub calcium: f32,
     pub magnesium: f32,
     pub zinc: f32,
+    pub copper: f32,
+    pub potassium: f32,
+    pub selenium: f32,
+}
+
+impl fmt::Display for NutritionPercent {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "Nutrition Percent: \n")?;
+        write!(f, "  ENERGY: {:.1}%   FAT {:.1}%  PROTEIN {:.1}%  CARBS {:.1}%\n",
+               self.energy * 100.0, self.fat * 100.0, self.protein * 100.0, self.carbs * 100.0)?;
+        write!(f, "  SODIUM {:.1}%  CHOLESTEROL {:.1}%\n",
+               self.sodium * 100.0, self.cholesterol * 100.0)?;
+        write!(f, "  fiber {:.1}%  n3-fat {:.1}%  n6-fat {:.1}%\n",
+               self.fiber * 100.0, self.n3_fat * 100.0, self.n6_fat * 100.0)?;
+        write!(f, "  lysine {:.1}%  isoleucine {:.1}%  leucine {:.1}%  methionine: {:.1}%\n",
+               self.lysine * 100.0, self.isoleucine * 100.0, self.leucine * 100.0, self.methionine * 100.0)?;
+        write!(f, "  phenylalanine {:.1}%  tryptophan {:.1}%  valine {:.1}%  threonine: {:.1}%\n",
+               self.phenylalanine * 100.0, self.tryptophan * 100.0, self.valine * 100.0, self.threonine * 100.0)?;
+        write!(f, "  B1 {:.1}%  B2 {:.1}%  B3 {:.1}%  B5 {:.1}%  B6 {:.1}%  B9 {:.1}%  B12 {:.1}%\n",
+               self.thiamin * 100.0, self.riboflavin * 100.0, self.niacin * 100.0,
+               self.pantothenic_acid * 100.0, self.b6 * 100.0, self.folate * 100.0,
+               self.cobalamin * 100.0)?;
+        write!(f, "  VitA {:.1}%  VitC {:.1}%  VitD {:.1}%  VitE {:.1}%\n",
+               self.vitamin_a * 100.0, self.vitamin_c * 100.0, self.vitamin_d * 100.0,
+               self.vitamin_e * 100.0)?;
+        write!(f, "  Ca {:.1}%  Mg {:.1}%  Zn {:.1}%  Cu {:.1}%  K {:.1}%  Se {:.1}%\n",
+               self.calcium * 100.0, self.magnesium * 100.0, self.zinc * 100.0,
+               self.copper * 100.0, self.potassium * 100.0, self.selenium * 100.0)?;
+
+        Ok(())
+    }
 }
 
 #[derive(Debug)]
@@ -251,11 +299,8 @@ impl Food {
         }
     }
 
-    pub fn combine(self, other: Food, name: String) -> Food {
-        Food {
-            name,
-            grams: self.grams + other.grams,
-            nutrition: self.nutrition + other.nutrition,
-        }
+    pub fn combine(&mut self, other: Food) {
+        self.grams += other.grams;
+        self.nutrition = self.nutrition + other.nutrition;
     }
 }
