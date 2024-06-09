@@ -87,23 +87,3 @@ fn main() {
     println!("{:?}\n", diet.nutrition);
     println!("{}", diet.nutrition / normal_daily);
 }
-
-/*
- * Nutrition Percent:
- *   ENERGY: 38.7%   FAT 52.4%  PROTEIN 76.7%  CARBS 21.1%
- *   SODIUM 24.0%  CHOLESTEROL 4.6%
- *   fiber 86.3%  n3-fat 130.2%  n6-fat 115.1%
- *   lysine 139.7%  isoleucine 188.8%  leucine 147.2%  methionine: 57.8%
- *   phenylalanine 124.7%  tryptophan 159.3%  valine 166.5%  threonine: 157.4%
- *   B1 55.9%  B2 74.0%  B3 65.6%  B5 51.1%  B6 88.2%  B9 75.9%  B12 77.3%
- *   VitA 48.5%  VitC 201.4%  VitD 130.0%  VitE 146.3%
- *   Ca 37.7%  Mg 72.5%  Zn 45.8%  Cu 154.2%  K 94.1%  Se 60.2%
- *
- * ENERGY: 34.4% -- we get it from our adipose tissue instead
- * FAT: -- more than 100% of essential fat: n3-fat 123.1%  n6-fat 105.1%
- * PROTEIN: 70.3% -- 84 g/kg meets the RDA.
- * CARBS: -- there are no essential carbs. Our body will use the protein
- *           to generate more carbs
- * Ess Amino Acids:  We are only low in methionine, which is hard to find.
- * Vitamins: we are low in some. Take a multivitamin pill
- */
